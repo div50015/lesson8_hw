@@ -2,14 +2,15 @@
 Протестируйте классы из модуля homework/models.py
 """
 import pytest
-
-from models import Product
-
+from models import Product, Cart
 
 @pytest.fixture
 def product():
     return Product("book", 100, "This is a book", 1000)
 
+@pytest.fixture()
+def cart():
+    return Cart()
 
 class TestProducts:
     """
@@ -19,16 +20,22 @@ class TestProducts:
 
     def test_product_check_quantity(self, product):
         # TODO напишите проверки на метод check_quantity
-        pass
+        assert product.check_quantity(10)
+        assert product.check_quantity(1000)
+        assert not product.check_quantity(1001)
 
     def test_product_buy(self, product):
         # TODO напишите проверки на метод buy
-        pass
+        old_quantity = product.quantity
+        product.buy(10)
+        assert old_quantity == product.quantity + 10
 
     def test_product_buy_more_than_available(self, product):
         # TODO напишите проверки на метод buy,
         #  которые ожидают ошибку ValueError при попытке купить больше, чем есть в наличии
-        pass
+        with pytest.raises(ValueError) as excinfo:
+            product.buy(10000)
+        assert excinfo.typename == 'ValueError'
 
 
 class TestCart:
@@ -38,3 +45,8 @@ class TestCart:
         На некоторые методы у вас может быть несколько тестов.
         Например, негативные тесты, ожидающие ошибку (используйте pytest.raises, чтобы проверить это)
     """
+
+    def test_add_to_cart(self, cart,  product):
+        cart.add_product(product, 1)
+
+
