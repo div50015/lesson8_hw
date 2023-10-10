@@ -48,5 +48,28 @@ class TestCart:
 
     def test_add_to_cart(self, cart,  product):
         cart.add_product(product, 1)
+        assert cart.products[product] == 1
+        cart.add_product(product, 10)
+        assert cart.products[product] == 11
 
 
+    def test_del_to_card(self, cart , product):
+        cart.add_product(product, 10)
+        cart.remove_product(product, 9)
+        assert cart.products[product] == 1
+        cart.remove_product(product, 2)
+        assert product not in cart.products.keys()
+        cart.add_product(product, 10)
+        cart.remove_product(product)
+        assert product not in cart.products.keys()
+
+
+    def test_clear_card(self, cart , product):
+        cart.add_product(product, 10)
+        cart.clear()
+        assert product not in cart.products.keys()
+
+
+    def test_total_price(self, cart, product):
+        cart.add_product(product, 7)
+        assert cart.get_total_price() == 100 * 7

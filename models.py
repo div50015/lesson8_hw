@@ -52,11 +52,11 @@ class Cart:
         Метод добавления продукта в корзину.
         Если продукт уже есть в корзине, то увеличиваем количество
         """
-        if product  in self.products.keys():
-            self.products[product] += buy_count
-        else:
-            self.products[product] = buy_count
-        #self.products[product] = self.products.get(product, 0) + buy_count
+        # if product  in self.products.keys():
+        #     self.products[product] += buy_count
+        # else:
+        #     self.products[product] = buy_count
+        self.products[product] = self.products.get(product, 0) + buy_count
 
     def remove_product(self, product: Product, remove_count=None):
         """
@@ -64,14 +64,22 @@ class Cart:
         Если remove_count не передан, то удаляется вся позиция
         Если remove_count больше, чем количество продуктов в позиции, то удаляется вся позиция
         """
-        raise NotImplementedError
+        if not remove_count:
+            del self.products[product]
+        elif remove_count >= self.products[product]:
+            del self.products[product]
+        else:
+            self.products[product] -= remove_count
+
 
     def clear(self):
-        raise NotImplementedError
+        self.products.clear()
+
 
     def get_total_price(self) -> float:
-        raise NotImplementedError
-
+        for product in self.products:
+            total = product.price * self.products[product]
+        return total
     def buy(self):
         """
         Метод покупки.
