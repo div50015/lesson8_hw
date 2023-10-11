@@ -73,3 +73,13 @@ class TestCart:
     def test_total_price(self, cart, product):
         cart.add_product(product, 7)
         assert cart.get_total_price() == 100 * 7
+
+
+    def test_bay(self, cart, product):
+        cart.add_product(product, 10)
+        old_quantity = product.quantity
+        product.buy(10)
+        assert old_quantity == product.quantity + 10
+        with pytest.raises(ValueError) as excinfo:
+            product.buy(1000)
+        assert excinfo.typename == 'ValueError'
