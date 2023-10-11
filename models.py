@@ -79,11 +79,11 @@ class Cart:
             total = product.price * self.products[product]
         return total
 
-    def buy(self, product: Product):
+    def buy(self):
         """
         Метод покупки.
         Учтите, что товаров может не хватать на складе.
         В этом случае нужно выбросить исключение ValueError
         """
-        for product in self.products:
-            product.buy()
+        for product, quantity in self.products.items():
+            product.buy(quantity)
